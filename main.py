@@ -48,7 +48,20 @@ def Run_game():
         #Saving it as a list to pass it to convertet
         return(deck)
 
+    def Shuffle():
+        random.shuffle(Current_game.deck)
 
+    def Get_images():
+        for cards in Current_game.deck:
+            if not os.path.isfile("Card_images/"+cards+".png"):
+                try:
+                    request = requests.get("https://api.scryfall.com/cards/search?order=set&q=name="+cards+"+unique:prints") 
+                    urllib.request.urlretrieve(request.json()["data"][0]['image_uris']['normal'],"Card_images/"+cards+'.png')
+                except KeyError:
+                    request = requests.get("https://api.scryfall.com/cards/search?order=set&q=name="+cards+"+unique:prints") 
+                    urllib.request.urlretrieve(request.json()["data"][0]["card_faces"][0]['image_uris']['normal'],"Card_images/"+cards+'.png')
+        print("done")
+    
     Deck = Get_Deck("Deck.txt")
     Current_game = Game()
     Current_game.deck = Deck
@@ -57,8 +70,9 @@ def Run_game():
     frm = ttk.Frame(Current_game.window, padding=10)
     frm.grid()
     ttk.Label(frm, text="test").grid(column=1, row=1)
-
-    ttk.Button(frm, text="Test", command=on_click).grid(column=2, row=2)
+    Deck_name= Entry(frm).grid(column=1, row=3)
+    ttk.Button(frm, text="Get images", command=Get_images).grid(column=2, row=2)
+    
     ttk.Button(frm, text="Quit", command=Current_game.window.destroy).grid(column=3, row=3)
 
     Current_game.window.mainloop()
