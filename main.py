@@ -5,7 +5,7 @@ from tkinter import ttk
 import json
 import requests
 import urllib.request
-from PIL import Image  
+from PIL import Image 
 import os
 import sys
 
@@ -30,7 +30,7 @@ class Game():
         x = 2
 
 
-def Run_game():
+def Run_game(Current_game):
 
     def on_click():
         print(Current_game.deck)
@@ -62,18 +62,36 @@ def Run_game():
                     urllib.request.urlretrieve(request.json()["data"][0]["card_faces"][0]['image_uris']['normal'],"Card_images/"+cards+'.png')
         print("done")
     
-    Deck = Get_Deck("Deck.txt")
-    Current_game = Game()
-    Current_game.deck = Deck
-    Current_game.window = Tk()
+    def click():
+        print(Current_game.deck)
 
+
+ 
     frm = ttk.Frame(Current_game.window, padding=10)
     frm.grid()
-    ttk.Label(frm, text="test").grid(column=1, row=1)
-    Deck_name= Entry(frm).grid(column=1, row=3)
+
+    ttk.Label(frm, text="Choose the deck").grid(column=1, row=1)
+
+    #Deck_name = ttk.Entry(frm, width=20)
+    #Deck_name.grid(column=1, row=2)
+
     ttk.Button(frm, text="Get images", command=Get_images).grid(column=2, row=2)
-    
-    ttk.Button(frm, text="Quit", command=Current_game.window.destroy).grid(column=3, row=3)
+    ttk.Button(frm, text="Show deck", command=click).grid(column=1, row=3)
+    ttk.Button(frm, text="Quit", command=Current_game.window.destroy).grid(column=2, row=3)
+
+
+    lb = Listbox(frm)
+    lb.grid(column=1, row=2)
+    fl = os.listdir(os.getcwd()+"\Decks")
+    for f in fl:
+	    lb.insert(0,f)
+
+    def Item_selected(event):
+        selected_deck = lb.get(lb.curselection())
+        Current_game.deck = Get_Deck(selected_deck)
+        print(f"The current deck is {selected_deck}")
+
+    lb.bind('<<ListboxSelect>>', Item_selected)
 
     Current_game.window.mainloop()
 
@@ -95,7 +113,12 @@ def Run_game():
 
 if __name__ == "__main__":
     
-    Run_game()
+    #Deck = Get_Deck("Deck.txt")
+    Current_game = Game()
+    #Current_game.deck = Deck
+    Current_game.window = Tk()
+
+    Run_game(Current_game)
 
 
 
