@@ -29,7 +29,6 @@ class Game():
     def Go(self):
         x = 2
 
-
 def Run_game(Current_game):
 
     def on_click():
@@ -65,8 +64,6 @@ def Run_game(Current_game):
     def click():
         print(Current_game.deck)
 
-
- 
     frm = ttk.Frame(Current_game.window, padding=10)
     frm.grid()
 
@@ -96,26 +93,9 @@ def Run_game(Current_game):
     Current_game.window.mainloop()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
-    
-    #Deck = Get_Deck("Deck.txt")
+
     Current_game = Game()
-    #Current_game.deck = Deck
     Current_game.window = Tk()
 
     Run_game(Current_game)
